@@ -1,0 +1,22 @@
+version: '3'
+
+# docker-compose -f docker-compose.dev.yml build
+# docker-compose -f docker-compose.dev.yml up -d
+# docker-compose -f docker-compose.dev.yml down -v
+services:
+  dev:
+    build: ./
+    container_name: flask_web
+    command: gunicorn --bind 0.0.0.0:5000 wsgi:app # WSGI server
+
+    volumes:
+      - ./web_dev1:/app
+    expose:
+      - 5000
+
+  nginx:
+    build: ./nginx
+    ports:
+      - 80:80
+    depends_on:
+      - dev
